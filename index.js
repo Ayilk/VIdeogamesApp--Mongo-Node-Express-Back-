@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { dbConnection } = require('./db/config');
 require('dotenv').config();
+const routes = require('./routes/index.js');
 
 
 //console.log(process.env);
@@ -23,17 +24,18 @@ app.use(cors())
 app.use(express.json());
 
 //Rutas
-app.use('/api/auth', require('./routes/auth'));
+//app.use('/api/auth', require('./routes/auth'));
+app.use('/api', routes);
 
 //GET
-app.get('/', (req, res) => {
-    res.status(200).json({
-        ok: true,
-        msg: 'Ruta principal conectada exitosamente',
-        uid: 1234
-    })
+// app.get('/', (req, res) => {
+//     res.status(200).json({
+//         ok: true,
+//         msg: 'Ruta principal conectada exitosamente',
+//         uid: 1234
+//     })
     
-})
+// })
 
 
 app.listen(process.env.PORT, () => {

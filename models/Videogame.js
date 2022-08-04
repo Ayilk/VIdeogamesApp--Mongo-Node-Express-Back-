@@ -10,16 +10,16 @@ const VideogameSchema = Schema({
         type: String,
         required: true,        
     },
-    developer: {
-        type: String,
+    developers: {
+        type: Array,
         required: true
     },
     year: {
-        type: Int32,
+        type: Number,
         required: true
     },
     consoles: {
-        type: String,
+        type: Array,
         required: true
     },
     image: {
