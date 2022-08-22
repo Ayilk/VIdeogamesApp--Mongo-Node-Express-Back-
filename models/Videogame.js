@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, default: mongoose } = require('mongoose');
 
 
 const VideogameSchema = Schema({
@@ -10,18 +10,22 @@ const VideogameSchema = Schema({
         type: String,
         required: true,        
     },
-    developers: {
-        type: Array,
-        required: true
-    },
+    developers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Developer'
+        }
+    ],
     year: {
         type: Number,
         required: true
     },
-    consoles: {
-        type: Array,
-        required: true
-    },
+    consoles: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Console'
+        }
+    ],
     image: {
         type: String,
         required: true
