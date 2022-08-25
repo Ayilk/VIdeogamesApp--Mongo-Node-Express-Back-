@@ -2,7 +2,7 @@ const {response} = require('express');
 const Developer = require('../models/Developer');
 
 const getAllDevelopers = async(req, res) => {        
-    Developer.find().populate('videogames')
+    Developer.find()
         .then(developers => res.json(developers))
 }
 

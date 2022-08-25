@@ -15,8 +15,8 @@ const addVideogames = async(req, res) => {
             const console = await  Console.findById(consoles);
             const developer = await Developer.findById(developers);
 
-           console.videogames.push(videogame.id);           
-           developer.videogames.push(videogame.id);
+           console.videogames.push(videogame.name);           
+           developer.videogames.push(videogame.name);
            
            await console.save();
            await developer.save();
@@ -36,8 +36,7 @@ const addVideogames = async(req, res) => {
         
 }
 
-const getAllGames = async(req, res) => {
-    
+const getAllGames = async(req, res) => {    
         
         try {
            Videogame.find().populate( 'consoles', 'developers')
@@ -58,7 +57,9 @@ const getGameById = (req, res) => {
     //const id = req.parmas.id
     Videogame.findById(req.params.id)
         .then(videogame => {
-            res.send(videogame)
+            if(videogame){
+                res.send(videogame)
+            }else{res.send("No hay videojuego con ese id")}
         })
         .catch(error => {
             console.log(error);
@@ -69,15 +70,14 @@ const getGameById = (req, res) => {
 const updateVideogame = async(req, res) => {
     const { name, description, developers, year, consoles, image, active} = req.body;
         
-        try {
+        try {            
             
-            
+            const videogame = await Videogame.findOneAndUpdate(req.params.id, {
+                name: name, description:description, developers:developers, year:year, consoles:consoles, image:image, active:active
+            });           
+
             const console = await  Console.findById(consoles);
             const developer = await Developer.findById(developers);
-            
-            const videogame = Videogame.findOneAndUpdate(req.params.id,
-                { name, description, developers, year, consoles, image, active}
-            )
 
            console.videogames.push(videogame.id);           
            developer.videogames.push(videogame.id);
@@ -85,7 +85,7 @@ const updateVideogame = async(req, res) => {
            await console.save();
            await developer.save();
 
-           await videogame.save();
+           
 
            res.send(videogame)
 
@@ -99,9 +99,27 @@ const updateVideogame = async(req, res) => {
         }
 }
 
+const deleteVideogame = (req, res) => {
+    Videogame.findOneAndDelete(req.params.id)
+        .then(response => res.status(200).send(response) )
+        .catch(error => {
+            console.log(error)
+            return res.status(500).json({
+                ok: false,
+                msg: 'Por favor hable con el administrador',
+            });
+        })
+}
+
+
 module.exports = {
     addVideogames,
     getAllGames,
     getGameById, 
-    updateVideogame
+    updateVideogame,
+    deleteVideogame
 }
+
+//consultas 
+  //nombre
+  //direccion
