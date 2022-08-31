@@ -1,5 +1,5 @@
 const {Router} = require('express');
-const { getAllGames, addVideogames, getGameById, updateVideogame, deleteVideogame } = require('../controllers/Videogames');
+const { getAllGames, addVideogames, getGameById, updateVideogame, deleteVideogame, getGameByName } = require('../controllers/Videogames');
 
 
 const router = Router();
@@ -7,6 +7,7 @@ const router = Router();
 router.post('/', addVideogames);
 router.get('/', getAllGames );
 router.get('/:id', getGameById );
+router.get('/', getGameByName)
 router.put('/:id', updateVideogame);
 router.delete('/:id', deleteVideogame);
 

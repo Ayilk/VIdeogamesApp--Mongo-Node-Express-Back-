@@ -10,22 +10,16 @@ const VideogameSchema = Schema({
         type: String,
         required: true,        
     },
-    developers: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Developer'
-        }
-    ],
+    developers: [{
+        type: String
+    }],
     year: {
         type: Number,
         required: true
     },
-    consoles: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Console'
-        }
-    ],
+    consoles: [{
+        type: String
+    }],
     image: {
         type: String,
         required: true

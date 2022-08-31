@@ -1,36 +1,22 @@
 const {response} = require('express');
 const Videogame = require('../models/Videogame');
-const Console = require('../models/Console');
-const Developer = require('../models/Developer');
-
 
 const addVideogames = async(req, res) => {
     const { name, description, developers, year, consoles, image, active} = req.body;
         
-        try {
-            
-            //Crear videogame con el modelo
-            const videogame = new Videogame(req.body);
-    
-            const console = await  Console.findById(consoles);
-            const developer = await Developer.findById(developers);
-
-           console.videogames.push(videogame.name);           
-           developer.videogames.push(videogame.name);
+        try {          
            
-           await console.save();
-           await developer.save();
+            const videogame = new Videogame(req.body);         
 
-           await videogame.save();
+            await videogame.save();
 
-           res.send(videogame)
-
+            res.send(videogame)
     
         } catch (error) {
             console.log(error)
             return res.status(500).json({
                 ok: false,
-                msg: 'Por favor hable con el administrador',
+                msg: 'No se pudo agregar videojuego',
             });
         }
         
@@ -39,15 +25,14 @@ const addVideogames = async(req, res) => {
 const getAllGames = async(req, res) => {    
         
         try {
-           Videogame.find().populate( 'consoles', 'developers')
-            .then(videogames => res.json(videogames))
-    
+           Videogame.find()
+            .then(videogames => res.json(videogames))    
     
         } catch (error) {
             console.log(error)
             return res.status(500).json({
                 ok: false,
-                msg: 'Por favor hable con el administrador',
+                msg: 'No se pudieron cargar todos los videojuegos',
             });
         }
         
@@ -63,7 +48,30 @@ const getGameById = (req, res) => {
         })
         .catch(error => {
             console.log(error);
-            res.json(error)
+            return res.status(500).json({
+                ok: false,
+                msg: 'No se pudo cargar el videojuego por ID',
+            });
+        })
+}
+
+const getGameByName = (req, res) => {
+    const name = req.query.name;
+    Videogame.find({name: {
+        $regex: name,
+        $options: "i"
+    }})
+        .then(videogame => {
+            if(videogame){
+                res.send(videogame)
+            }else{res.send("No hay videojuego con ese Nombre")}
+        })
+        .catch(error => {
+            console.log(error);
+            return res.status(500).json({
+                ok: false,
+                msg: 'No se pudo cargar el videojuego por Nombre',
+            });
         })
 }
 
@@ -72,41 +80,29 @@ const updateVideogame = async(req, res) => {
         
         try {            
             
-            const videogame = await Videogame.findOneAndUpdate(req.params.id, {
-                name: name, description:description, developers:developers, year:year, consoles:consoles, image:image, active:active
-            });           
+            const videogame = await Videogame.findOneAndUpdate(req.params.id, { name, description, developers, year, consoles, image, active});           
 
-            const console = await  Console.findById(consoles);
-            const developer = await Developer.findById(developers);
-
-           console.videogames.push(videogame.id);           
-           developer.videogames.push(videogame.id);
-           
-           await console.save();
-           await developer.save();
-
-           
+            await videogame.save();           
 
            res.send(videogame)
-
     
         } catch (error) {
             console.log(error)
             return res.status(500).json({
                 ok: false,
-                msg: 'Por favor hable con el administrador',
+                msg: 'No se pudo actualizar videojuego',
             });
         }
 }
 
 const deleteVideogame = (req, res) => {
     Videogame.findOneAndDelete(req.params.id)
-        .then(response => res.status(200).send(response) )
+        .then(response => res.status(200).send("Se eliminó el videojuego exitosamente") )
         .catch(error => {
             console.log(error)
             return res.status(500).json({
                 ok: false,
-                msg: 'Por favor hable con el administrador',
+                msg: 'No se pudo eliminar videojuego',
             });
         })
 }
@@ -117,7 +113,8 @@ module.exports = {
     getAllGames,
     getGameById, 
     updateVideogame,
-    deleteVideogame
+    deleteVideogame,
+    getGameByName
 }
 
 //consultas 
