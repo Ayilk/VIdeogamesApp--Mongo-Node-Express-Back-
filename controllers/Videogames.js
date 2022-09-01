@@ -42,9 +42,14 @@ const getGameById = (req, res) => {
     //const id = req.parmas.id
     Videogame.findById(req.params.id)
         .then(videogame => {
+            //console.log(videogame)
             if(videogame){
                 res.send(videogame)
-            }else{res.send("No hay videojuego con ese id")}
+            }else{
+                return res.status(200).json({
+                ok: true,
+                msg: 'No hay videojuego con ese ID',
+            });}
         })
         .catch(error => {
             console.log(error);
