@@ -7,7 +7,6 @@ const router = Router();
 router.post('/', addVideogames);
 router.get('/', getAllGames );
 router.get('/:id', getGameById );
-router.get('/', getGameByName)
 router.put('/:id', updateVideogame);
 router.delete('/:id', deleteVideogame);
 

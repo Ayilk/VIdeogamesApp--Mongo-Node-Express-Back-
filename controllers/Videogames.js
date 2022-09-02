@@ -23,10 +23,18 @@ const addVideogames = async(req, res) => {
 }
 
 const getAllGames = async(req, res) => {    
-        
+    const name = req.query.name;
         try {
-           Videogame.find()
-            .then(videogames => res.json(videogames))    
+            Videogame.find()
+                .then(videogames => {
+                    if(!name){
+                        res.send(videogames)
+                    }else{
+                        const nameGame = videogames.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
+                        nameGame.length? res.status(200).send(nameGame): res.status(404).send("No hay videojuego con ese nombre")
+                    }
+
+                })            
     
         } catch (error) {
             console.log(error)
@@ -36,6 +44,11 @@ const getAllGames = async(req, res) => {
             });
         }
         
+}
+
+const getGameByName = (req, res) => {
+   
+    
 }
 
 const getGameById = (req, res) => {
@@ -60,25 +73,7 @@ const getGameById = (req, res) => {
         })
 }
 
-const getGameByName = (req, res) => {
-    const name = req.query.name;
-    Videogame.find({name: {
-        $regex: name,
-        $options: "i"
-    }})
-        .then(videogame => {
-            if(videogame){
-                res.send(videogame)
-            }else{res.send("No hay videojuego con ese Nombre")}
-        })
-        .catch(error => {
-            console.log(error);
-            return res.status(500).json({
-                ok: false,
-                msg: 'No se pudo cargar el videojuego por Nombre',
-            });
-        })
-}
+
 
 const updateVideogame = async(req, res) => {
     const { name, description, developers, year, consoles, image, active} = req.body;
