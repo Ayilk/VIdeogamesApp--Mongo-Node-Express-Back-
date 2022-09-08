@@ -107,6 +107,21 @@ const deleteVideogame = (req, res) => {
         })
 }
 
+const getTopConsoles = (req, res) => {
+    // Videogame.aggregate([{"$project": {"consoles": 1}},
+    //                      {"$group": {"_id": "$consoles", "count": {"$sum": 1}}}   
+    //                     ])
+    // Videogame.find({"consoles": {"$ne": null}})
+    Videogame.aggregate([
+                         //{"$project": {"name": 1,"consoles": 1}},
+                         {"$unwind": "$consoles" }, 
+                         {"$group": {"_id": "$consoles" , "count": {"$sum": 1}}},                        
+                        ]).sort({"count": -1}).limit(5)
+
+        .then(respuesta => res.send(respuesta))
+        .catch(error => console.log(error))
+}
+
 
 module.exports = {
     addVideogames,
@@ -114,7 +129,8 @@ module.exports = {
     getGameById, 
     updateVideogame,
     deleteVideogame,
-    getGameByName
+    getGameByName,
+    getTopConsoles
 }
 
 //consultas 
