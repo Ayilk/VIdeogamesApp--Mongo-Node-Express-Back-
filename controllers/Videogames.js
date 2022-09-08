@@ -122,6 +122,18 @@ const getTopConsoles = (req, res) => {
         .catch(error => console.log(error))
 }
 
+const getTopDevelopersConsoles = (req, res) => {    
+    Videogame.aggregate([
+                         {"$project": {"developers": 1,"consoles": 1}},
+                         {"$unwind": "$developers"}, 
+                         {"$unwind": "$consoles" },
+                         {"$group": {"_id": "$developers" , "count": {"$sum": 1}}},                       
+                        ]).sort({"count": -1}).limit(5)
+
+        .then(respuesta => res.send(respuesta))
+        .catch(error => console.log(error))
+}
+
 
 module.exports = {
     addVideogames,
@@ -130,7 +142,8 @@ module.exports = {
     updateVideogame,
     deleteVideogame,
     getGameByName,
-    getTopConsoles
+    getTopConsoles,
+    getTopDevelopersConsoles
 }
 
 //consultas 
