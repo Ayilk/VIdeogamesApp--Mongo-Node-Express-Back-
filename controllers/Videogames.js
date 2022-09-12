@@ -46,10 +46,7 @@ const getAllGames = async(req, res) => {
         
 }
 
-const getGameByName = (req, res) => {
-   
-    
-}
+
 
 const getGameById = (req, res) => {
     //const id = req.parmas.id
@@ -97,7 +94,13 @@ const updateVideogame = async(req, res) => {
 
 const deleteVideogame = (req, res) => {
     Videogame.findOneAndDelete(req.params.id)
-        .then(response => res.status(200).send("Se eliminó el videojuego exitosamente") )
+        .then(response => {
+            console.log(response);
+            res.status(200).json({
+                ok:true,
+                msg: "Se elimino el videojuego exitosamente"
+            } )
+        })
         .catch(error => {
             console.log(error)
             return res.status(500).json({
@@ -140,8 +143,7 @@ module.exports = {
     getAllGames,
     getGameById, 
     updateVideogame,
-    deleteVideogame,
-    getGameByName,
+    deleteVideogame,  
     getTopConsoles,
     getTopDevelopersConsoles
 }
