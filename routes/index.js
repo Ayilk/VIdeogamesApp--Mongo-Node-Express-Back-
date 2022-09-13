@@ -12,10 +12,10 @@ const router = Router();
 
 
 
-router.use('/auth', authRouter);    
 router.use('/videogames', videogamesRouter);
 router.use('/consoles', consolesRouter);
 router.use('/developers', devsRouter);
+router.use('/auth', authRouter);    
 
 router.use('/', (req, res) => {
     res.status(200).send({message: "Ruta principal conectada exitosamente"})
