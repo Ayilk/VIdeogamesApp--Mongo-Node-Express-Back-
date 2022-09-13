@@ -4,7 +4,7 @@ const { Router } = require('express');
 const videogamesRouter = require('./Videogames');
 const consolesRouter = require('./Consoles')
 const devsRouter = require('./Developers');
-const authRouter = require('./Auth');
+const authRouter = require('./auth');
 
 
 
